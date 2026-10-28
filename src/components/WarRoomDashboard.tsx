@@ -25,26 +25,40 @@ import {
   Layers,
   Search,
   Radio,
-  Share2
+  Share2,
+  Edit3,
+  Save,
+  RefreshCw,
+  PlusCircle,
+  X
 } from 'lucide-react';
 import { benchmarkCaseDocket, allSampleDockets } from '../data/sampleCases';
-import { CaseDocket } from '../types/trial';
+import { CaseDocket, TrialDocument } from '../types/trial';
 import { AgentMailIntegrationCard } from './AgentMailIntegrationCard';
 import { TimelineVisualizer } from './TimelineVisualizer';
 import { ContradictionMatrix } from './ContradictionMatrix';
 import { CrossExamTreeViewer } from './CrossExamTreeViewer';
 import { ExhibitBinderModal } from './ExhibitBinderModal';
+import { NewCaseModal } from './NewCaseModal';
+import { ContradictionDetector } from '../engine/contradictionDetector';
+import { CrossExamGenerator } from '../engine/crossExamGenerator';
 
 export const WarRoomDashboard: React.FC = () => {
-  const [docketsList] = useState<CaseDocket[]>(allSampleDockets);
+  const [docketsList, setDocketsList] = useState<CaseDocket[]>(allSampleDockets);
   const [selectedCaseNum, setSelectedCaseNum] = useState<string>(benchmarkCaseDocket.caseNumber);
   const [docket, setDocket] = useState<CaseDocket>(benchmarkCaseDocket);
   const [selectedContraId, setSelectedContraId] = useState<string>(docket.contradictions[0]?.id || '');
   const [isBinderOpen, setIsBinderOpen] = useState(false);
+  const [isNewCaseModalOpen, setIsNewCaseModalOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<'WAR_ROOM' | 'DOCUMENTS'>('WAR_ROOM');
   const [selectedDocId, setSelectedDocId] = useState<string>(docket.documents[0]?.id || '');
   const [isCaseDropdownOpen, setIsCaseDropdownOpen] = useState(false);
   const [docSearchQuery, setDocSearchQuery] = useState('');
+
+  // Inline Document Editing State
+  const [isEditingDoc, setIsEditingDoc] = useState(false);
+  const [editedDocContent, setEditedDocContent] = useState('');
+  const [reAnalyzeToast, setReAnalyzeToast] = useState<string | null>(null);
 
   // Audio / Stenographer Simulation State
   const [isPlayingAudio, setIsPlayingAudio] = useState(false);
@@ -62,7 +76,57 @@ export const WarRoomDashboard: React.FC = () => {
       setIsCaseDropdownOpen(false);
       setPlaybackSeconds(862);
       setIsPlayingAudio(false);
+      setIsEditingDoc(false);
     }
+  };
+
+  const handleCaseCreated = (newDocket: CaseDocket) => {
+    setDocketsList(prev => [newDocket, ...prev]);
+    setDocket(newDocket);
+    setSelectedCaseNum(newDocket.caseNumber);
+    setSelectedContraId(newDocket.contradictions[0]?.id || '');
+    setSelectedDocId(newDocket.documents[0]?.id || '');
+    setIsCaseDropdownOpen(false);
+    setIsEditingDoc(false);
+    setReAnalyzeToast(`Case ${newDocket.caseNumber} ingested! Contradictions calculated.`);
+    setTimeout(() => setReAnalyzeToast(null), 4000);
+  };
+
+  const handleStartEditDoc = () => {
+    if (selectedDocument) {
+      setEditedDocContent(selectedDocument.content);
+      setIsEditingDoc(true);
+    }
+  };
+
+  const handleSaveEditDoc = () => {
+    if (!selectedDocument) return;
+
+    const updatedDocuments = docket.documents.map(d => 
+      d.id === selectedDocument.id ? { ...d, content: editedDocContent } : d
+    );
+
+    const updatedDocket: CaseDocket = {
+      ...docket,
+      documents: updatedDocuments
+    };
+
+    const analysis = ContradictionDetector.analyzeDocket(updatedDocket);
+    const newTrees = analysis.contradictions.map(c => CrossExamGenerator.generateForContradiction(c));
+
+    const finalizedDocket: CaseDocket = {
+      ...updatedDocket,
+      credibilityScore: analysis.credibilityScore > 0 ? analysis.credibilityScore : 65,
+      contradictions: analysis.contradictions,
+      questionTrees: newTrees
+    };
+
+    setDocket(finalizedDocket);
+    setDocketsList(prev => prev.map(d => d.caseNumber === finalizedDocket.caseNumber ? finalizedDocket : d));
+    setSelectedContraId(finalizedDocket.contradictions[0]?.id || '');
+    setIsEditingDoc(false);
+    setReAnalyzeToast('Exhibit updated & Case Re-analyzed! Contradictions updated in real time.');
+    setTimeout(() => setReAnalyzeToast(null), 4000);
   };
 
   // Timer loop for simulated audio recording
@@ -209,6 +273,18 @@ export const WarRoomDashboard: React.FC = () => {
               )}
             </div>
 
+            {/* Ingest New Case Modal Trigger */}
+            <button
+              type="button"
+              aria-haspopup="dialog"
+              aria-label="Ingest or create a new trial case docket"
+              onClick={() => setIsNewCaseModalOpen(true)}
+              className="flex items-center gap-1.5 rounded-lg border border-gold-500/50 bg-gold-500/10 px-3 py-1.5 text-xs font-bold text-gold-300 transition-all hover:bg-gold-500/20 hover:border-gold-400 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-500 shadow-sm"
+            >
+              <PlusCircle className="h-3.5 w-3.5 text-gold-400" />
+              <span>+ Ingest Case</span>
+            </button>
+
             {/* Exhibit Binder Modal Launch */}
             <button
               type="button"
@@ -228,6 +304,39 @@ export const WarRoomDashboard: React.FC = () => {
           MAIN COMMAND SURFACE
           ========================================================================= */}
       <main className="mx-auto max-w-7xl px-4 pt-6 sm:px-6 space-y-6">
+
+        {/* Real-time re-analysis notification toast */}
+        {reAnalyzeToast && (
+          <div className="flex items-center justify-between rounded-xl border border-emerald-500/40 bg-emerald-950/90 px-4 py-3 text-xs text-emerald-200 shadow-xl backdrop-blur-md animate-in slide-in-from-top-2">
+            <div className="flex items-center gap-2">
+              <CheckCircle2 className="h-4 w-4 text-emerald-400 shrink-0" />
+              <span className="font-semibold">{reAnalyzeToast}</span>
+            </div>
+            <button
+              type="button"
+              onClick={() => setReAnalyzeToast(null)}
+              className="text-emerald-400 hover:text-emerald-200"
+            >
+              <X className="h-3.5 w-3.5" />
+            </button>
+          </div>
+        )}
+
+        {/* Interactive Guidance Pill Banner */}
+        <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-gold-500/25 bg-court-900/60 px-4 py-2 text-xs text-parchment-300">
+          <div className="flex items-center gap-2">
+            <span className="flex h-2 w-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span className="font-bold text-gold-400">Interactive Trial Mode:</span>
+            <span>Click any contradiction, test witness evasion branching (<strong>YES / NO / UNCERTAIN</strong>), or edit/ingest documents below.</span>
+          </div>
+          <button
+            type="button"
+            onClick={() => setIsNewCaseModalOpen(true)}
+            className="text-[11px] font-bold text-gold-400 underline hover:text-gold-300 transition-colors"
+          >
+            + Ingest Your Own Case Documents &rarr;
+          </button>
+        </div>
 
         {/* 1. Case Banner: Luxury Obsidian Slab */}
         <div className="rounded-2xl border border-court-700 bg-gradient-to-br from-court-900 via-court-850 to-court-900 p-6 shadow-2xl relative overflow-hidden">
@@ -662,7 +771,7 @@ export const WarRoomDashboard: React.FC = () => {
             <div className="lg:col-span-2 rounded-xl border border-court-700 bg-court-850 p-6 shadow-2xl relative">
               {selectedDocument ? (
                 <>
-                  <div className="flex items-center justify-between border-b border-court-700 pb-4">
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-court-700 pb-4">
                     <div>
                       <div className="flex items-center gap-2">
                         <span className="rounded bg-gold-500/10 px-2 py-0.5 text-xs font-mono font-bold text-gold-400 border border-gold-500/30">
@@ -677,16 +786,59 @@ export const WarRoomDashboard: React.FC = () => {
                       </p>
                     </div>
 
-                    <div className="text-right text-xs text-parchment-400 font-mono">
-                      <div>Recorded: {new Date(selectedDocument.recordedDate || Date.now()).toLocaleDateString('en-IN')}</div>
-                      <div className="text-emerald-400">SHA-256 SEAL VALID</div>
+                    <div className="flex items-center gap-2">
+                      {!isEditingDoc ? (
+                        <button
+                          type="button"
+                          onClick={handleStartEditDoc}
+                          className="flex items-center gap-1.5 rounded-lg border border-gold-500/40 bg-gold-500/10 px-3 py-1.5 text-xs font-semibold text-gold-300 hover:bg-gold-500/20 transition-all cursor-pointer"
+                        >
+                          <Edit3 className="h-3.5 w-3.5" />
+                          <span>Edit Exhibit Statement</span>
+                        </button>
+                      ) : (
+                        <div className="flex items-center gap-2">
+                          <button
+                            type="button"
+                            onClick={() => setIsEditingDoc(false)}
+                            className="rounded-lg border border-court-700 bg-court-850 px-3 py-1.5 text-xs font-semibold text-parchment-400 hover:text-parchment-200"
+                          >
+                            Cancel
+                          </button>
+                          <button
+                            type="button"
+                            onClick={handleSaveEditDoc}
+                            className="flex items-center gap-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 px-3 py-1.5 text-xs font-bold text-white shadow-lg transition-all cursor-pointer"
+                          >
+                            <Save className="h-3.5 w-3.5" />
+                            <span>Save & Re-Analyze</span>
+                          </button>
+                        </div>
+                      )}
                     </div>
                   </div>
 
-                  {/* Document Text Box */}
-                  <div className="mt-4 max-h-[60vh] overflow-y-auto rounded-lg bg-court-950 p-5 font-mono text-xs leading-relaxed text-parchment-200 whitespace-pre-wrap border border-court-800 shadow-inner">
-                    {selectedDocument.content}
-                  </div>
+                  {/* Document Text Box or Textarea */}
+                  {isEditingDoc ? (
+                    <div className="mt-4 space-y-3">
+                      <div className="rounded-lg bg-amber-500/10 border border-amber-500/30 p-2.5 text-[11px] text-amber-200 flex items-center gap-2">
+                        <Sparkles className="h-4 w-4 text-amber-400 shrink-0" />
+                        <span>
+                          <strong>Live Re-Analysis Mode:</strong> You can edit times, weapons, or witness accounts (e.g. change "18:15 PM" or "wooden stick"). Clicking <em>Save & Re-Analyze</em> will re-run the Contradiction Engine in real time!
+                        </span>
+                      </div>
+                      <textarea
+                        rows={12}
+                        value={editedDocContent}
+                        onChange={e => setEditedDocContent(e.target.value)}
+                        className="w-full rounded-lg bg-court-950 p-4 font-mono text-xs leading-relaxed text-parchment-100 border border-gold-500/40 focus:border-gold-500 focus:outline-none focus:ring-1 focus:ring-gold-500"
+                      />
+                    </div>
+                  ) : (
+                    <div className="mt-4 max-h-[60vh] overflow-y-auto rounded-lg bg-court-950 p-5 font-mono text-xs leading-relaxed text-parchment-200 whitespace-pre-wrap border border-court-800 shadow-inner">
+                      {selectedDocument.content}
+                    </div>
+                  )}
                 </>
               ) : (
                 <div className="p-8 text-center text-parchment-400">
@@ -705,6 +857,13 @@ export const WarRoomDashboard: React.FC = () => {
         docket={docket}
         isOpen={isBinderOpen}
         onClose={() => setIsBinderOpen(false)}
+      />
+
+      {/* Ingest New Case Modal */}
+      <NewCaseModal
+        isOpen={isNewCaseModalOpen}
+        onClose={() => setIsNewCaseModalOpen(false)}
+        onCaseCreated={handleCaseCreated}
       />
     </div>
   );
