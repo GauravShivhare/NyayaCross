@@ -40,6 +40,7 @@ import { ContradictionMatrix } from './ContradictionMatrix';
 import { CrossExamTreeViewer } from './CrossExamTreeViewer';
 import { ExhibitBinderModal } from './ExhibitBinderModal';
 import { NewCaseModal } from './NewCaseModal';
+import { VideoWalkthroughModal } from './VideoWalkthroughModal';
 import { ContradictionDetector } from '../engine/contradictionDetector';
 import { CrossExamGenerator } from '../engine/crossExamGenerator';
 
@@ -50,6 +51,7 @@ export const WarRoomDashboard: React.FC = () => {
   const [selectedContraId, setSelectedContraId] = useState<string>(docket.contradictions[0]?.id || '');
   const [isBinderOpen, setIsBinderOpen] = useState(false);
   const [isNewCaseModalOpen, setIsNewCaseModalOpen] = useState(false);
+  const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<'WAR_ROOM' | 'DOCUMENTS'>('WAR_ROOM');
   const [selectedDocId, setSelectedDocId] = useState<string>(docket.documents[0]?.id || '');
   const [isCaseDropdownOpen, setIsCaseDropdownOpen] = useState(false);
@@ -283,6 +285,18 @@ export const WarRoomDashboard: React.FC = () => {
             >
               <PlusCircle className="h-3.5 w-3.5 text-gold-400" />
               <span>+ Ingest Case</span>
+            </button>
+
+            {/* 2-Min Interactive Video Walkthrough */}
+            <button
+              type="button"
+              aria-haspopup="dialog"
+              aria-label="Open 70-second official video walkthrough"
+              onClick={() => setIsVideoModalOpen(true)}
+              className="flex items-center gap-1.5 rounded-lg border border-purple-500/50 bg-purple-950/40 px-3 py-1.5 text-xs font-bold text-purple-300 transition-all hover:bg-purple-900/50 hover:border-purple-400 cursor-pointer shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-500"
+            >
+              <Play className="h-3.5 w-3.5 text-purple-400 fill-current" />
+              <span>🎬 2-Min Demo Video</span>
             </button>
 
             {/* Exhibit Binder Modal Launch */}
@@ -864,6 +878,12 @@ export const WarRoomDashboard: React.FC = () => {
         isOpen={isNewCaseModalOpen}
         onClose={() => setIsNewCaseModalOpen(false)}
         onCaseCreated={handleCaseCreated}
+      />
+
+      {/* 2-Min Interactive Video Walkthrough Modal */}
+      <VideoWalkthroughModal
+        isOpen={isVideoModalOpen}
+        onClose={() => setIsVideoModalOpen(false)}
       />
     </div>
   );
