@@ -1,13 +1,15 @@
 # 🏛️ NyayaCross: AI Trial War Room & Cross-Examination Contradiction Engine
 
 > **Built for HackIndia: AI for Lawyers Hackathon 2026**  
-> **Team:** `chor_chapati_gang`  
+> **Live Web Application:** [https://nyaya-cross.vercel.app/](https://nyaya-cross.vercel.app/)  
+> **Team:** `chor_chapati_gang` (Gaurav Shivhare & Antigravity Autonomous Agent)  
 > **Autonomous Agent Partner:** `devlopergauravai@agentmail.to` (via [AgentMail](https://www.agentmail.to/))
 
+[![Live Deployment](https://img.shields.io/badge/Vercel-Live%20Deployment-success.svg)](https://nyaya-cross.vercel.app/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.7-blue.svg)](https://www.typescriptlang.org/)
 [![Next.js](https://img.shields.io/badge/Next.js-14.2-black.svg)](https://nextjs.org/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.4-38bdf8.svg)](https://tailwindcss.com/)
-[![Tests](https://img.shields.io/badge/Tests-16%20Passed-success.svg)](https://vitest.dev/)
+[![Tests](https://img.shields.io/badge/Tests-41%20Passed-success.svg)](https://vitest.dev/)
 
 ---
 
@@ -56,8 +58,8 @@ Existing legal AI tools are almost exclusively generic *"chat with your PDF cont
 
 ### 1. Clone & Install Dependencies
 ```bash
-git clone <repo-url>
-cd ai_hackathon_agent_integration
+git clone https://github.com/GauravShivhare/NyayaCross.git
+cd NyayaCross
 
 # Install web dependencies
 npm install
@@ -71,10 +73,10 @@ Open **[http://localhost:3000](http://localhost:3000)** in your browser to view 
 
 ### 3. Run Test Suites
 ```bash
-# Run TypeScript Vitest suite (14 tests)
+# Run TypeScript Vitest suite (34 tests)
 npm test
 
-# Run Python AgentMail Worker tests (2 tests)
+# Run Python AgentMail Worker tests (7 tests)
 python -m unittest tests/test_agentmail_worker.py
 ```
 
