@@ -1,0 +1,108 @@
+@import '../styles/tokens.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: var(--bg-canvas);
+  --foreground: var(--text-primary);
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: var(--ny-primitive-font-sans);
+  overflow-x: hidden;
+}
+
+/* Custom scrollbars for courtroom docket feel */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--ny-primitive-obsidian-900);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--ny-primitive-obsidian-750);
+  border-radius: 3px;
+  border: 1px solid var(--border-subtle);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--ny-primitive-obsidian-700);
+}
+
+/* Audio waveform bar animation */
+@keyframes waveOscillate {
+  0%, 100% {
+    transform: scaleY(0.25);
+  }
+  50% {
+    transform: scaleY(1);
+  }
+}
+
+.animate-wave-bar {
+  animation: waveOscillate 1.2s ease-in-out infinite alternate;
+  transform-origin: bottom;
+}
+
+/* Judicial Vellum Watermark */
+.judicial-watermark {
+  background-image: repeating-linear-gradient(
+    -35deg,
+    rgba(212, 175, 55, 0.03),
+    rgba(212, 175, 55, 0.03) 1px,
+    transparent 1px,
+    transparent 40px
+  );
+}
+
+/* Print Stylesheet for Official Court Master Exhibit Binder */
+@media print {
+  body {
+    background: #ffffff !important;
+    color: #0f172a !important;
+  }
+
+  .no-print,
+  header,
+  nav,
+  button,
+  .print-hide {
+    display: none !important;
+  }
+
+  .print-binder-view {
+    position: static !important;
+    background: #ffffff !important;
+    color: #0f172a !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+    border: none !important;
+    max-width: 100% !important;
+    width: 100% !important;
+  }
+
+  .print-binder-sheet {
+    background: #ffffff !important;
+    color: #0f172a !important;
+    border: 1.5pt solid #0f172a !important;
+    box-shadow: none !important;
+    page-break-after: always;
+  }
+
+  .print-page-break {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  .print-black-text {
+    color: #0f172a !important;
+  }
+
+  .print-border-court {
+    border-color: #64748b !important;
+  }
+}

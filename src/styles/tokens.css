@@ -1,0 +1,327 @@
+/**
+ * NyayaCross Design System - Master Token Architecture
+ * "The Obsidian Bench & Parchment War Room"
+ * 
+ * 3-Layer Token Hierarchy:
+ * Layer 1: Primitive Tokens (Raw Design Values)
+ * Layer 2: Semantic Tokens (Purpose-Driven Aliases)
+ * Layer 3: Component Tokens (Component-Specific Overrides)
+ */
+
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&family=Space+Grotesk:wght@500;600;700&display=swap');
+
+:root {
+  /* ==========================================================================
+     LAYER 1: PRIMITIVE TOKENS (Raw literals: Color, Type, Radii, Elevation)
+     ========================================================================== */
+
+  /* Palette: Obsidian & Chamber Slate */
+  --ny-primitive-obsidian-950: #080B11; /* Deep Bench Void */
+  --ny-primitive-obsidian-900: #0D111A; /* Chamber Floor / Canvas Base */
+  --ny-primitive-obsidian-850: #131926; /* Dossier Slate / Card Surface */
+  --ny-primitive-obsidian-800: #1A2234; /* Tactical Elevation / Raised Surface */
+  --ny-primitive-obsidian-750: #232C42; /* Sub-shelf / Recessed Panel */
+  --ny-primitive-obsidian-700: #2F3B55; /* Boundary Slate / Active Border */
+  --ny-primitive-obsidian-600: #425273; /* Low-contrast Divider */
+
+  /* Palette: Judicial Gold & Burnished Brass */
+  --ny-primitive-gold-300: #FFE082; /* Gilded Flare / Inscription Highlight */
+  --ny-primitive-gold-400: #E5C07B; /* Burnished Judicial Brass */
+  --ny-primitive-gold-500: #D4AF37; /* Supreme Bench Gold / Seal Foil */
+  --ny-primitive-gold-600: #B8860B; /* Dark Court Brass */
+  --ny-primitive-gold-700: #8C6508; /* Deep Antique Bronze */
+  --ny-primitive-gold-900: #3D2C04; /* Gold Underglow Base */
+
+  /* Palette: Fatal Impeachment Crimson */
+  --ny-primitive-crimson-400: #FF4D4D; /* Fatal Impeachment Flare */
+  --ny-primitive-crimson-500: #DC2626; /* Contradiction Flag / Inadmissible Strike */
+  --ny-primitive-crimson-700: #991B1B; /* Perjury Deep Stroke */
+  --ny-primitive-crimson-900: #7F1D1D; /* Fatal Ground Bed */
+  --ny-primitive-crimson-950: #450A0A; /* Critical Anomaly Trench */
+
+  /* Palette: Material Variation Amber */
+  --ny-primitive-amber-400: #FBBF24; /* Caution Marker */
+  --ny-primitive-amber-500: #F59E0B; /* Material Inconsistency Accent */
+  --ny-primitive-amber-700: #B45309; /* Deep Inconsistency Border */
+  --ny-primitive-amber-800: #78350F; /* Section 145 BSA Flag Shadow */
+  --ny-primitive-amber-950: #451A03; /* Amber Base */
+
+  /* Palette: Evidence Azure & Cyan */
+  --ny-primitive-cyan-400: #38BDF8; /* Active Evidentiary Pin */
+  --ny-primitive-cyan-500: #0EA5E9; /* Docket Stream Cyan */
+  --ny-primitive-cyan-600: #0284C7; /* Statutory Citation Azure */
+  --ny-primitive-cyan-800: #075985; /* Exhibit Pin Shadow */
+  --ny-primitive-cyan-900: #0C4A6E; /* Evidentiary Floor */
+
+  /* Palette: Courtroom Parchment & Archival Slate */
+  --ny-primitive-parchment-50: #F8FAFC; /* High Judicial Vellum White */
+  --ny-primitive-parchment-100: #E2E8F0; /* Docket Parchment Off-White */
+  --ny-primitive-parchment-200: #CBD5E1; /* Secondary Transcript Inscription */
+  --ny-primitive-parchment-400: #94A3B8; /* Archival Muted Slate */
+  --ny-primitive-parchment-600: #64748B; /* De-emphasized Docket Notes */
+  --ny-primitive-parchment-800: #334155; /* Inactive Ledger Inscription */
+
+  /* Palette: Verdict Safe Emerald */
+  --ny-primitive-emerald-400: #34D399; /* Corroborated / Unimpeached */
+  --ny-primitive-emerald-500: #10B981; /* Affirmative Testimony */
+  --ny-primitive-emerald-800: #065F46; /* Admissible Proof Border */
+  --ny-primitive-emerald-950: #022C22; /* Admitted Trench */
+
+  /* Typography Primitives */
+  --ny-primitive-font-serif: 'Cinzel', 'Instrument Serif', Georgia, serif;
+  --ny-primitive-font-display: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+  --ny-primitive-font-sans: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --ny-primitive-font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+  /* Spacing Primitives (4px Base Grid) */
+  --ny-primitive-space-1: 0.25rem;  /* 4px */
+  --ny-primitive-space-2: 0.5rem;   /* 8px */
+  --ny-primitive-space-3: 0.75rem;  /* 12px */
+  --ny-primitive-space-4: 1rem;     /* 16px */
+  --ny-primitive-space-5: 1.25rem;  /* 20px */
+  --ny-primitive-space-6: 1.5rem;   /* 24px */
+  --ny-primitive-space-8: 2rem;     /* 32px */
+  --ny-primitive-space-10: 2.5rem;  /* 40px */
+  --ny-primitive-space-12: 3rem;    /* 48px */
+  --ny-primitive-space-16: 4rem;    /* 64px */
+
+  /* Corner Radii Primitives (Surgically Precise) */
+  --ny-primitive-radius-none: 0px;
+  --ny-primitive-radius-xs: 2px;
+  --ny-primitive-radius-sm: 4px;
+  --ny-primitive-radius-md: 6px;
+  --ny-primitive-radius-lg: 8px;
+  --ny-primitive-radius-xl: 12px;
+  --ny-primitive-radius-2xl: 16px;
+  --ny-primitive-radius-full: 9999px;
+
+  /* Elevation & Lighting Primitives */
+  --ny-primitive-shadow-obsidian-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.45);
+  --ny-primitive-shadow-obsidian-md: 0 4px 6px -1px rgba(0, 0, 0, 0.5), 0 2px 4px -2px rgba(0, 0, 0, 0.5);
+  --ny-primitive-shadow-obsidian-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.6), 0 4px 6px -4px rgba(0, 0, 0, 0.6);
+  --ny-primitive-shadow-obsidian-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.7), 0 8px 10px -6px rgba(0, 0, 0, 0.7);
+  --ny-primitive-shadow-gold-flare: 0 0 15px rgba(212, 175, 55, 0.22);
+  --ny-primitive-shadow-crimson-flare: 0 0 20px rgba(220, 38, 38, 0.32);
+  --ny-primitive-shadow-cyan-flare: 0 0 15px rgba(56, 189, 248, 0.25);
+
+
+  /* ==========================================================================
+     LAYER 2: SEMANTIC TOKENS (Purpose-Driven Aliases)
+     ========================================================================== */
+
+  /* Canvas & Surface Layers */
+  --bg-canvas: var(--ny-primitive-obsidian-950);
+  --bg-surface-elevated: var(--ny-primitive-obsidian-900);
+  --bg-surface-card: var(--ny-primitive-obsidian-850);
+  --bg-surface-overlay: var(--ny-primitive-obsidian-800);
+  --bg-surface-recessed: var(--ny-primitive-obsidian-750);
+  --bg-surface-glass: rgba(13, 17, 26, 0.82);
+  --bg-surface-glass-heavy: rgba(8, 11, 17, 0.92);
+  --bg-surface-parchment-wash: rgba(248, 250, 252, 0.03);
+
+  /* Border & Inset Separators */
+  --border-subtle: rgba(47, 59, 85, 0.45);
+  --border-default: var(--ny-primitive-obsidian-800);
+  --border-prominent: var(--ny-primitive-obsidian-700);
+  --border-gold-accent: rgba(212, 175, 55, 0.35);
+  --border-gold-solid: var(--ny-primitive-gold-500);
+  --border-fatal: rgba(220, 38, 38, 0.45);
+  --border-material: rgba(245, 158, 11, 0.45);
+  --border-evidence: rgba(56, 189, 248, 0.4);
+
+  /* Text & Inscription Roles */
+  --text-primary: var(--ny-primitive-parchment-50);
+  --text-secondary: var(--ny-primitive-parchment-100);
+  --text-muted: var(--ny-primitive-parchment-400);
+  --text-faint: var(--ny-primitive-parchment-600);
+  --text-disabled: var(--ny-primitive-parchment-800);
+  --text-gold-burnished: var(--ny-primitive-gold-400);
+  --text-gold-gilded: var(--ny-primitive-gold-300);
+  --text-fatal-impeachment: var(--ny-primitive-crimson-400);
+  --text-material-variation: var(--ny-primitive-amber-400);
+  --text-evidence-azure: var(--ny-primitive-cyan-400);
+
+  /* Litigative State & Verdict Semantics */
+  --verdict-fatal-bg: rgba(220, 38, 38, 0.12);
+  --verdict-fatal-border: rgba(255, 77, 77, 0.35);
+  --verdict-fatal-text: var(--ny-primitive-crimson-400);
+  --verdict-fatal-glow: var(--ny-primitive-shadow-crimson-flare);
+
+  --verdict-material-bg: rgba(245, 158, 11, 0.12);
+  --verdict-material-border: rgba(245, 158, 11, 0.35);
+  --verdict-material-text: var(--ny-primitive-amber-400);
+
+  --verdict-minor-bg: rgba(56, 189, 248, 0.12);
+  --verdict-minor-border: rgba(56, 189, 248, 0.35);
+  --verdict-minor-text: var(--ny-primitive-cyan-400);
+
+  --verdict-safe-bg: rgba(16, 185, 129, 0.12);
+  --verdict-safe-border: rgba(16, 185, 129, 0.35);
+  --verdict-safe-text: var(--ny-primitive-emerald-400);
+
+  /* Tactical Controls & Focus States */
+  --interactive-gold-bg: rgba(212, 175, 55, 0.12);
+  --interactive-gold-hover: rgba(212, 175, 55, 0.22);
+  --interactive-gold-active: rgba(212, 175, 55, 0.32);
+  --interactive-gold-ring: rgba(212, 175, 55, 0.5);
+
+  --interactive-surface-hover: rgba(26, 34, 52, 0.8);
+  --interactive-surface-active: rgba(35, 44, 66, 0.95);
+
+
+  /* ==========================================================================
+     LAYER 3: COMPONENT TOKENS (Component-Scoped Overrides)
+     ========================================================================== */
+
+  /* Component: Supreme Bench Header */
+  --ny-comp-header-bg: var(--bg-surface-glass-heavy);
+  --ny-comp-header-border: var(--border-default);
+  --ny-comp-header-badge-bg: rgba(212, 175, 55, 0.08);
+  --ny-comp-header-badge-border: rgba(212, 175, 55, 0.25);
+  --ny-comp-header-badge-text: var(--ny-primitive-gold-400);
+
+  /* Component: Contradiction Matrix */
+  --ny-comp-matrix-panel-bg: var(--bg-surface-card);
+  --ny-comp-matrix-panel-border: var(--border-default);
+  --ny-comp-matrix-card-bg: var(--ny-primitive-obsidian-900);
+  --ny-comp-matrix-card-border: var(--border-subtle);
+  --ny-comp-matrix-card-hover-border: var(--border-prominent);
+  --ny-comp-matrix-card-selected-bg: rgba(212, 175, 55, 0.04);
+  --ny-comp-matrix-card-selected-border: var(--ny-primitive-gold-500);
+  --ny-comp-matrix-card-selected-glow: var(--ny-primitive-shadow-gold-flare);
+
+  /* Component: Tactical Cross-Examination Question Tree */
+  --ny-comp-tree-viewport-bg: var(--ny-primitive-obsidian-950);
+  --ny-comp-tree-node-bg: var(--ny-primitive-obsidian-900);
+  --ny-comp-tree-node-border: var(--border-subtle);
+  --ny-comp-tree-node-active-bg: var(--ny-primitive-obsidian-850);
+  --ny-comp-tree-node-active-border: var(--ny-primitive-gold-400);
+  --ny-comp-tree-connector-line: var(--ny-primitive-obsidian-700);
+  --ny-comp-tree-connector-active: var(--ny-primitive-gold-500);
+  --ny-comp-tree-pressure-low: var(--ny-primitive-cyan-400);
+  --ny-comp-tree-pressure-med: var(--ny-primitive-amber-500);
+  --ny-comp-tree-pressure-high: var(--ny-primitive-crimson-400);
+
+  /* Component: Exhibit Binder Modal & Vellum Docket */
+  --ny-comp-binder-backdrop: rgba(8, 11, 17, 0.88);
+  --ny-comp-binder-frame-bg: var(--ny-primitive-obsidian-900);
+  --ny-comp-binder-frame-border: var(--border-prominent);
+  --ny-comp-binder-sheet-bg: var(--ny-primitive-obsidian-850);
+  --ny-comp-binder-vellum-texture: rgba(248, 250, 252, 0.02);
+  --ny-comp-binder-gold-seal: var(--ny-primitive-gold-500);
+  --ny-comp-binder-tamper-crimson: var(--ny-primitive-crimson-500);
+
+  /* Component: Timeline Contradiction Visualizer */
+  --ny-comp-timeline-track: var(--ny-primitive-obsidian-750);
+  --ny-comp-timeline-pin-bg: var(--ny-primitive-obsidian-900);
+  --ny-comp-timeline-pin-fatal: var(--ny-primitive-crimson-400);
+  --ny-comp-timeline-pin-material: var(--ny-primitive-amber-400);
+  --ny-comp-timeline-flag-azure: var(--ny-primitive-cyan-400);
+
+  /* Component: Autonomous AgentMail Ingestion Card */
+  --ny-comp-mail-card-bg: var(--bg-surface-card);
+  --ny-comp-mail-card-border: var(--border-default);
+  --ny-comp-mail-badge-bg: rgba(56, 189, 248, 0.1);
+  --ny-comp-mail-badge-border: rgba(56, 189, 248, 0.3);
+  --ny-comp-mail-badge-text: var(--ny-primitive-cyan-400);
+  --ny-comp-mail-pulse-indicator: #10B981;
+}
+
+/* ==========================================================================
+   SEMANTIC TYPOGRAPHIC SYSTEM & TABULAR NUMERAL DECORATORS
+   ========================================================================== */
+
+.font-court-serif {
+  font-family: var(--ny-primitive-font-serif);
+  letter-spacing: -0.015em;
+}
+
+.font-tactical-display {
+  font-family: var(--ny-primitive-font-display);
+  letter-spacing: -0.02em;
+}
+
+.font-body-sans {
+  font-family: var(--ny-primitive-font-sans);
+}
+
+.font-statute-mono {
+  font-family: var(--ny-primitive-font-mono);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+}
+
+/* Mandatory Tabular Numerals for Evidentiary Figures */
+.tabular-nums,
+[data-tabular-nums="true"] {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+}
+
+/* ==========================================================================
+   BESPOKE LUXURY MICRO-SURFACES & LITIGATION UTILITIES
+   ========================================================================== */
+
+/* Glassmorphism for High-Stakes Tactical Overlays */
+.court-glass {
+  background-color: var(--bg-surface-glass);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border-subtle);
+}
+
+.court-glass-heavy {
+  background-color: var(--bg-surface-glass-heavy);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border-default);
+}
+
+/* Burnished Judicial Gold Border Accent */
+.border-gold-burnished {
+  border: 1px solid rgba(212, 175, 55, 0.35);
+  box-shadow: inset 0 1px 0 rgba(255, 224, 130, 0.15);
+}
+
+/* Fatal Impeachment Warning Pulse */
+@keyframes fatal-impeachment-glow {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.4), inset 0 0 8px rgba(220, 38, 38, 0.15);
+    border-color: rgba(255, 77, 77, 0.6);
+  }
+  50% {
+    box-shadow: 0 0 18px 2px rgba(220, 38, 38, 0.25), inset 0 0 14px rgba(220, 38, 38, 0.25);
+    border-color: rgba(255, 77, 77, 0.9);
+  }
+}
+
+.animate-fatal-pulse {
+  animation: fatal-impeachment-glow 2.5s infinite ease-in-out;
+}
+
+/* Metallic Judicial Brass Shimmer */
+@keyframes brass-shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.shimmer-brass {
+  background: linear-gradient(
+    90deg,
+    rgba(212, 175, 55, 0) 0%,
+    rgba(255, 224, 130, 0.2) 50%,
+    rgba(212, 175, 55, 0) 100%
+  );
+  background-size: 200% 100%;
+  animation: brass-shimmer 4s infinite linear;
+}
+
+/* Parchment Vellum Texture Overlay */
+.parchment-vellum {
+  background-image: radial-gradient(rgba(248, 250, 252, 0.04) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
