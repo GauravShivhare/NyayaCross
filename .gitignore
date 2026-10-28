@@ -38,6 +38,9 @@ venv/
 .env.test.local
 .env.production.local
 
+# Video / Remotion local artifacts
+video/
+
 # Temp inspector scripts
 check_page.py
 check_signin_scripts.py
