@@ -39,7 +39,7 @@ export const AgentMailIntegrationCard: React.FC = () => {
       id: '2',
       timestamp: '16:40:02.405',
       tag: 'INFO',
-      text: 'Team authentication verified: chor_chapati_gang [Roster: 7CMXKB | Track: AI for Lawyers].'
+      text: 'Registry daemon verified: e-Courts Judicial Ingestion Stream active.'
     },
     {
       id: '3',
@@ -171,14 +171,14 @@ export const AgentMailIntegrationCard: React.FC = () => {
           <div>
             <div className="flex items-center gap-2">
               <h3 className="font-serif text-base font-bold text-parchment-50">
-                Autonomous Agent Teammate Integration
+                e-Courts Registry Autonomous Ingestion Daemon
               </h3>
               <span className="font-mono rounded bg-emerald-500/10 px-2.5 py-0.5 text-[10px] font-bold text-emerald-400 border border-emerald-500/30">
                 ACTIVE INBOX STREAM
               </span>
             </div>
             <p className="mt-0.5 text-xs text-parchment-400 font-sans">
-              Team: <strong className="text-parchment-200">chor_chapati_gang</strong> | Hackathon Track: <strong className="text-gold-300">AI for Lawyers</strong> | Code: <span className="font-mono text-emerald-400">7CMXKB</span>
+              Node: <strong className="text-parchment-200">High Court & Sessions Registry</strong> | Protocol: <strong className="text-gold-300">Secure Webhook Daemon</strong> | Security: <span className="font-mono text-emerald-400">TLS 1.3 / SHA-256</span>
             </p>
           </div>
         </div>
@@ -208,7 +208,7 @@ export const AgentMailIntegrationCard: React.FC = () => {
         {/* Inbox Address */}
         <div className="rounded-lg border border-court-700 bg-court-900 p-3.5">
           <div className="text-[11px] font-semibold uppercase tracking-wider text-parchment-400 font-sans">
-            Autonomous Teammate Inbox
+            Autonomous Registry Inbox
           </div>
           <div className="mt-1.5 flex items-center gap-2 font-mono text-xs font-bold text-gold-300">
             <Mail className="h-4 w-4 text-gold-400 shrink-0" />
@@ -219,11 +219,11 @@ export const AgentMailIntegrationCard: React.FC = () => {
         {/* Roster & Model */}
         <div className="rounded-lg border border-court-700 bg-court-900 p-3.5">
           <div className="text-[11px] font-semibold uppercase tracking-wider text-parchment-400 font-sans">
-            Hackathon Verification Key
+            Judicial Verification Protocol
           </div>
           <div className="mt-1.5 flex items-center gap-2 font-mono text-xs font-bold text-emerald-400">
             <Radio className="h-4 w-4 text-emerald-400 shrink-0" />
-            <span>7CMXKB • Gemini 2.5 Pro Engine</span>
+            <span>e-Filing v4.2 • Certified Node</span>
           </div>
         </div>
 
